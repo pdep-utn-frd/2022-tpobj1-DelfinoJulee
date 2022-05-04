@@ -12,7 +12,10 @@ object juego{
 		game.addVisual(cactus)
 		game.addVisual(dino)
 		game.addVisual(reloj)
+                game.addVisualCharacter(goku) 
 	
+                game.showAttributes(goku)  //Debug
+
 		keyboard.space().onPressDo{ self.jugar()}
 		
 		game.onCollideDo(dino,{ obstaculo => obstaculo.chocar()})
@@ -23,6 +26,7 @@ object juego{
 		dino.iniciar()
 		reloj.iniciar()
 		cactus.iniciar()
+		goku.iniciar()
 	}
 	
 	method jugar(){
@@ -40,6 +44,7 @@ object juego{
 		cactus.detener()
 		reloj.detener()
 		dino.morir()
+		goku.detener()
 	}
 	
 }
@@ -69,6 +74,44 @@ object reloj {
 		game.removeTickEvent("tiempo")
 	}
 }
+object goku {
+        var property position = game.origin()
+
+        method image() {
+	    return if (self.estaExtinto()) 
+	       "goku-grande.jpg"
+	    else 
+	       "goku.jpg"
+	}
+	
+	
+	method position() = game.at(dino.position().x(),y())
+	
+        method estaExtinto() {
+	return position == dino.position()
+	}
+
+	method iniciar(){
+		position = posicionInicial
+		game.onTick(velocidad,"moverGoku",{self.mover()})
+	}
+
+	method mover(){
+		position = position.left(1)
+		if (position.x() == -1)
+			position = posicionInicial
+	}
+
+	method chocar(){
+		reloj.iniciar()
+	}
+        method detener(){
+		game.removeTickEvent("moverMeteorito")
+	}
+	
+
+}
+
 
 object cactus {
 	 
@@ -109,7 +152,10 @@ object dino {
 	var vivo = true
 	var position = game.at(1,suelo.position().y())
 	
-	method image() = "dino.png"
+	method image() = return if (goku.estaExtinto()) 
+	       "goku-grande.jpg"
+	    else 
+	       "dino.png"
 	method position() = position
 	
 	method saltar(){
