@@ -44,7 +44,7 @@ object juego{
 		cactus.detener()
 		reloj.detener()
 		dino.morir()
-		goku.detener()
+		capsula.detener()
 	}
 	
 }
