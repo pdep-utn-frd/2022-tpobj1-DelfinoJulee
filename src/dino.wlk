@@ -12,7 +12,7 @@ object juego{
 		game.addVisual(cactus)
 		game.addVisual(dino)
 		game.addVisual(reloj)
-                game.addVisualCharacter(goku) 
+                game.addVisualCharacter(capsula) 
 	
                 game.showAttributes(goku)  //Debug
 
@@ -26,7 +26,7 @@ object juego{
 		dino.iniciar()
 		reloj.iniciar()
 		cactus.iniciar()
-		goku.iniciar()
+		capsula.iniciar()
 	}
 	
 	method jugar(){
@@ -74,18 +74,18 @@ object reloj {
 		game.removeTickEvent("tiempo")
 	}
 }
-object goku {
+object capsula {
         var property position = game.origin()
 
         method image() {
 	    return if (self.estaExtinto()) 
-	       "goku-grande.jpg"
+	       "goku.png"
 	    else 
-	       "goku.jpg"
+	       "capsula.png"
 	}
 	
 	
-	method position() = game.at(dino.position().x(),y())
+	method position() = game.at(dino.position().x(),0)
 	
         method estaExtinto() {
 	return position == dino.position()
@@ -93,22 +93,13 @@ object goku {
 
 	method iniciar(){
 		position = posicionInicial
-		game.onTick(velocidad,"moverGoku",{self.mover()})
+		game.onTick(velocidad,"moverCapsula",{self.mover()})
 	}
 
-	method mover(){
-		position = position.left(1)
-		if (position.x() == -1)
-			position = posicionInicial
-	}
 
 	method chocar(){
 		reloj.iniciar()
 	}
-        method detener(){
-		game.removeTickEvent("moverMeteorito")
-	}
-	
 
 }
 
@@ -156,7 +147,8 @@ object dino {
 	       "goku-grande.jpg"
 	    else 
 	       "dino.png"
-	method position() = position
+	       
+	method position() = game.at(capsula.position().x(),0)
 	
 	method saltar(){
 		if(position.y() == suelo.position().y()) {
